@@ -28,6 +28,12 @@ def hasLockrem(pasta):
             return True
     return False
 
+def hasLockname(pasta):
+    for file in os.listdir(pasta):
+        if file.endswith(".lockname"):
+            return True
+    return False    
+
 def hasLockpd(pasta):
     for file in os.listdir(pasta):
         if file.endswith(".lockpd"):
@@ -158,10 +164,10 @@ def juntar_csvs_em_dataframe(pasta, encoding='latin1'):
 def apagarCSV_Separado(pasta, df):
     countFiles = len(os.listdir(pasta))
     ableToWrite = 1
-    if (countFiles >= 5):
+    if (countFiles >= 6):
         if hasLockdel(pasta=pasta):
             print('Operação bloqueada, dados pré-processados.')
-            return
+            return str(pasta)+'final.csv'
         else:
             # Lista todos os arquivos na pasta que terminam com '.csv'
             arquivos_csv = [arquivo for arquivo in os.listdir(pasta) if arquivo.endswith('.csv')]
@@ -185,7 +191,56 @@ def apagarCSV_Separado(pasta, df):
             with open(file_path, 'w') as lock_file:
                 lock_file.write(lock_contents)
 
-            return
+            return str(pasta)+'final.csv'
     else:
         print('Interrompido pela segurança dos dados.')
         return 
+
+def cleanDF(dfLocation):
+    dfAnatel = pd.read_csv(dfLocation, encoding='latin-1')
+
+    if hasLockname(pasta=pasta):
+        print('Operação bloqueada, dados pré-processados.')
+        return
+
+    dfAnatel = dfAnatel[dfAnatel['NumServico'] == 10]
+
+    for x in dfAnatel.keys():
+        if x == 'NomeEntidade':
+            print('')
+        elif x == 'NumEstacao':
+            print('')
+        elif x == 'EnderecoEstacao':
+            print('')
+        elif x == 'EndComplemento':
+            print('')
+        elif x == 'SiglaUf':
+            print('')
+        elif x == 'CodMunicipio':
+            print('')
+        elif x == 'Tecnologia':
+            print('')
+        elif x == 'FreqTxMHz':
+            print('') 
+        elif x == 'FreqRxMHz':
+            print('')
+        elif x == 'Latitude':
+            print('') 
+        elif x == 'Longitude':
+            print('')
+        elif x == 'GanhoAntena':
+            print('') 
+        elif x == 'AlturaAntena':
+            print('')
+        elif x == 'tipoTecnologia':
+            print('')     
+        else:
+            del dfAnatel[x]
+    
+    lock_contents = "This file is a lock file. Do not remove."
+    file_path = str(pasta)+'csv.lockname'
+    with open(file_path, 'w') as lock_file:
+        lock_file.write(lock_contents)
+
+    dfAnatel.to_csv(dfLocation, index=False, encoding='latin-1')
+    return

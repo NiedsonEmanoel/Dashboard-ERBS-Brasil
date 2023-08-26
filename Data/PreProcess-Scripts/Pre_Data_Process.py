@@ -3,7 +3,7 @@ from OSCommands import *
 
 def preData():
     pushFiles(Folder_ERBS, ListFiles)
-    
+
     extractZP('14.zip', Folder_ERBS)
     extractZP('23.zip', Folder_ERBS)
     extractZP('24.zip', Folder_ERBS)
@@ -11,6 +11,8 @@ def preData():
 
     renomear_arquivos_csv(Folder_ERBS)
     rPD = juntar_csvs_em_dataframe(Folder_ERBS)
-    apagarCSV_Separado(Folder_ERBS, rPD)
+    finalLocation = apagarCSV_Separado(Folder_ERBS, rPD)
+    cleanDF(finalLocation)
 
 preData()
+
