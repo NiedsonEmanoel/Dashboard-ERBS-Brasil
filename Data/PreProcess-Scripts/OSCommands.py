@@ -2,6 +2,7 @@ import os
 import pandas as pd
 import zipfile
 import requests
+import math
 
 Folder_ERBS = '../ERBS/'
 
@@ -194,16 +195,36 @@ def apagarCSV_Separado(pasta, df):
             return str(pasta)+'final.csv'
     else:
         print('Interrompido pela segurança dos dados.')
-        return 
+        return str(pasta)+'final.csv'
+
+def calculate_range(freq_tx_mhz, freq_rx_mhz, ganho_antena, altura_antena):
+    altura_antena_m = altura_antena  # Altura da antena em metros
+    
+    # Calculando o raio de alcance usando a fórmula
+    range_km = math.sqrt((2 * altura_antena_m / 1.23) * (math.sqrt(ganho_antena) / (freq_tx_mhz * freq_rx_mhz)))
+    
+    return range_km
 
 def cleanDF(dfLocation):
     dfAnatel = pd.read_csv(dfLocation, encoding='latin-1')
 
-    if hasLockname(pasta=pasta):
+    if hasLockname(Folder_ERBS):
         print('Operação bloqueada, dados pré-processados.')
         return
 
     dfAnatel = dfAnatel[dfAnatel['NumServico'] == 10]
+    dfAnatel['RaioAlcance'] = 0
+
+    numeric_columns = ['FreqTxMHz', 'FreqRxMHz', 'GanhoAntena', 'AlturaAntena']
+    dfAnatel[numeric_columns] = dfAnatel[numeric_columns].apply(pd.to_numeric, errors='coerce')
+
+    for l in dfAnatel.index:
+        dfAnatel.loc[l, 'RaioAlcance'] = calculate_range(
+        dfAnatel.loc[l, 'FreqTxMHz'],
+        dfAnatel.loc[l, 'FreqRxMHz'],
+        dfAnatel.loc[l, 'GanhoAntena'],
+        dfAnatel.loc[l, 'AlturaAntena']
+        )*1000
 
     for x in dfAnatel.keys():
         if x == 'NomeEntidade':
@@ -236,11 +257,11 @@ def cleanDF(dfLocation):
             print('')     
         else:
             del dfAnatel[x]
-    
+
     lock_contents = "This file is a lock file. Do not remove."
-    file_path = str(pasta)+'csv.lockname'
+    file_path = str(Folder_ERBS)+'csv.lockname'
     with open(file_path, 'w') as lock_file:
         lock_file.write(lock_contents)
 
     dfAnatel.to_csv(dfLocation, index=False, encoding='latin-1')
-    return
+    return dfAnatel
