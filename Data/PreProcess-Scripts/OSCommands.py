@@ -1,6 +1,6 @@
 import os
 import pandas as pd
-
+import zipfile
 Folder_ERBS = '../ERBS/'
 
 
@@ -21,6 +21,20 @@ def hasLockdel(pasta):
         if file.endswith(".lockdel"):
             return True
     return False
+
+def extractZP(zip_pathe, extract_path):
+    """
+    Extrai o conteúdo de um arquivo ZIP para o diretório de extração e depois exclui o arquivo ZIP.
+
+    Args:
+        zip_pathe (str): Nome do arquivo ZIP.
+        extract_path (str): Caminho para o diretório de extração.
+    """
+    zip_path = extract_path+zip_pathe
+    with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+        zip_ref.extractall(extract_path)
+
+    os.remove(zip_path)  # Remove o arquivo ZIP após a extração    
 
 def renomear_arquivos_csv(pasta):
     """
