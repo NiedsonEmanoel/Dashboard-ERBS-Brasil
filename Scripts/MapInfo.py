@@ -25,30 +25,21 @@ liggaHexa= '#FF9200'
 
 def choseBest(name):
     if 'NICA BRASIL' in name:
-        IconP = VivoIcon
         Hexap = vivoHexa
     elif 'ALGAR TELECOM' in name:
-        IconP = AlgarIcon
         Hexap = algarHexa
     elif 'Brisanet Servicos' in name:
-        IconP = BrisanetIcon
         Hexap = brisanetHexa
     elif 'SERCOMTEL' in name:
-        IconP = SercomtelIcon
         Hexap = sercomtelHexa
     elif 'LIGUE TELECOM' in name:
-        IconP = LigueIcon
         Hexap = ligueHexa
     elif 'Winity Ii Telecom' in name:
-        IconP = WinityIcon
         Hexap = winityHexa
     elif 'LIGGA TELECOMUNICACOES' in name:
-        IconP = LiggaIcon
         Hexap = liggaHexa
     elif 'CLARO' in name:
-        IconP = ClaroIcon
         Hexap = claroHexa
     else:
-        IconP = TimIcon
         Hexap = timHexa
-    return IconP, Hexap
+    return Hexap
