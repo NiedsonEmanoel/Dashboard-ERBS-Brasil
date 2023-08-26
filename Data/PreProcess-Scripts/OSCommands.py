@@ -21,8 +21,39 @@ ListFiles = [
     'csvfile-doesnotmov (23).csv'
 ]
 
+
+def hasLockrem(pasta):
+    for file in os.listdir(pasta):
+        if file.endswith(".lockrem"):
+            return True
+    return False
+
+def hasLockpd(pasta):
+    for file in os.listdir(pasta):
+        if file.endswith(".lockpd"):
+            return True
+    return False
+
+def hasLockdel(pasta):
+    for file in os.listdir(pasta):
+        if file.endswith(".lockdel"):
+            return True
+    return False
+
 def pushFiles(pasta, files):
     base_url = "https://github.com/NiedsonEmanoel/Dashboard-ERBS-Brasil/raw/68ac4504d06f5b414e493a61c3cafa7f197e152b/Data/ERBS/"
+    
+    if hasLockdel(pasta=pasta):
+        print('Operação bloqueada, dados pré-processados.')
+        return
+
+    if hasLockpd(pasta=pasta):
+        print('Operação bloqueada, dados pré-processados.')
+        return
+
+    if hasLockrem(pasta=pasta):
+        print('Operação bloqueada, dados pré-processados.')
+        return
 
     # Verificar se o caminho da pasta é válido
     if not os.path.exists(pasta):
@@ -44,25 +75,6 @@ def pushFiles(pasta, files):
                 print(f"Não foi possível baixar o arquivo '{file}'.")
         else:
             print(f"O arquivo '{file}' já existe na pasta.")
-
-
-def hasLockrem(pasta):
-    for file in os.listdir(pasta):
-        if file.endswith(".lockrem"):
-            return True
-    return False
-
-def hasLockpd(pasta):
-    for file in os.listdir(pasta):
-        if file.endswith(".lockpd"):
-            return True
-    return False
-
-def hasLockdel(pasta):
-    for file in os.listdir(pasta):
-        if file.endswith(".lockdel"):
-            return True
-    return False
 
 def extractZP(zip_pathe, extract_path):
     """
@@ -151,21 +163,6 @@ def apagarCSV_Separado(pasta, df):
             # Lista todos os arquivos na pasta que terminam com '.csv'
             arquivos_csv = [arquivo for arquivo in os.listdir(pasta) if arquivo.endswith('.csv')]
             arquivos_csv.sort()  # Ordena a lista de arquivos CSV alfabeticamente
-
-            inputA = input('VERIFICOU SE NÃO HÁ O ARQUIVO .CSV ÚNICO-FINAL? (SIM)/(NAO)')
-            if(inputA != 'SIM'):
-                print('Interrompido pela segurança dos dados.')
-                return
-
-            inputB = input('PROSSEGUIR COM A EXCLUSÃO? (sim)/(nao)')
-            if(inputB != 'sim'):
-                print('Interrompido pela segurança dos dados.')
-                return
-
-            inputC = input('QUAL A DATA DE LANÇAMENTO DO JOGO RDR 2? (DD/MM/AAAA)')
-            if(inputC != '26/10/2018'):
-                print('Interrompido pela segurança dos dados.')
-                return
 
             for i, arquivo_csv in enumerate(arquivos_csv, start=1):
                 caminho = os.path.join(pasta, arquivo_csv)  # Obtém o caminho completo do arquivo antigo
