@@ -2,6 +2,8 @@ import pandas as pd
 from OSCommands import *
 
 def preData():
+    pushFiles(Folder_ERBS, ListFiles)
+    
     extractZP('14.zip', Folder_ERBS)
     extractZP('23.zip', Folder_ERBS)
     extractZP('24.zip', Folder_ERBS)

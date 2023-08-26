@@ -1,7 +1,49 @@
 import os
 import pandas as pd
 import zipfile
+import requests
+
 Folder_ERBS = '../ERBS/'
+
+ListFiles = [
+    '14.zip', '23.zip', '24.zip', '27.zip',
+    'csvfile-doesnotmov (1).csv', 'csvfile-doesnotmov (2).csv',
+    'csvfile-doesnotmov (3).csv', 'csvfile-doesnotmov (4).csv',
+    'csvfile-doesnotmov (5).csv', 'csvfile-doesnotmov (6).csv',
+    'csvfile-doesnotmov (7).csv', 'csvfile-doesnotmov (8).csv',
+    'csvfile-doesnotmov (9).csv', 'csvfile-doesnotmov (10).csv',
+    'csvfile-doesnotmov (11).csv', 'csvfile-doesnotmov (12).csv',
+    'csvfile-doesnotmov (13).csv', 'csvfile-doesnotmov (14).csv',
+    'csvfile-doesnotmov (15).csv', 'csvfile-doesnotmov (16).csv',
+    'csvfile-doesnotmov (17).csv', 'csvfile-doesnotmov (18).csv',
+    'csvfile-doesnotmov (19).csv', 'csvfile-doesnotmov (20).csv',
+    'csvfile-doesnotmov (21).csv', 'csvfile-doesnotmov (22).csv',
+    'csvfile-doesnotmov (23).csv'
+]
+
+def pushFiles(pasta, files):
+    base_url = "https://github.com/NiedsonEmanoel/Dashboard-ERBS-Brasil/raw/68ac4504d06f5b414e493a61c3cafa7f197e152b/Data/ERBS/"
+
+    # Verificar se o caminho da pasta é válido
+    if not os.path.exists(pasta):
+        print("Caminho inválido.")
+        return
+
+    for file in files:
+        url = base_url + file.replace(' ', '%20')
+        file_path = os.path.join(pasta, file)
+
+        if not os.path.exists(file_path):
+            response = requests.get(url)
+            
+            if response.status_code == 200:
+                with open(file_path, "wb") as f:
+                    f.write(response.content)
+                print(f"Arquivo '{file}' baixado com sucesso.")
+            else:
+                print(f"Não foi possível baixar o arquivo '{file}'.")
+        else:
+            print(f"O arquivo '{file}' já existe na pasta.")
 
 
 def hasLockrem(pasta):
