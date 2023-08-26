@@ -218,14 +218,6 @@ def cleanDF(dfLocation):
     numeric_columns = ['FreqTxMHz', 'FreqRxMHz', 'GanhoAntena', 'AlturaAntena']
     dfAnatel[numeric_columns] = dfAnatel[numeric_columns].apply(pd.to_numeric, errors='coerce')
 
-    for l in dfAnatel.index:
-        dfAnatel.loc[l, 'RaioAlcance'] = calculate_range(
-        dfAnatel.loc[l, 'FreqTxMHz'],
-        dfAnatel.loc[l, 'FreqRxMHz'],
-        dfAnatel.loc[l, 'GanhoAntena'],
-        dfAnatel.loc[l, 'AlturaAntena']
-        )*1000
-
     for x in dfAnatel.keys():
         if x == 'NomeEntidade':
             print('')
@@ -257,6 +249,14 @@ def cleanDF(dfLocation):
             print('')     
         else:
             del dfAnatel[x]
+    
+    for l in dfAnatel.index:
+        dfAnatel.loc[l, 'RaioAlcance'] = calculate_range(
+        dfAnatel.loc[l, 'FreqTxMHz'],
+        dfAnatel.loc[l, 'FreqRxMHz'],
+        dfAnatel.loc[l, 'GanhoAntena'],
+        dfAnatel.loc[l, 'AlturaAntena']
+        )*1000
 
     lock_contents = "This file is a lock file. Do not remove."
     file_path = str(Folder_ERBS)+'csv.lockname'
