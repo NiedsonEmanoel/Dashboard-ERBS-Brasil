@@ -84,11 +84,14 @@ def extractZP(zip_pathe, extract_path):
         zip_pathe (str): Nome do arquivo ZIP.
         extract_path (str): Caminho para o diretório de extração.
     """
-    zip_path = extract_path+zip_pathe
-    with zipfile.ZipFile(zip_path, 'r') as zip_ref:
-        zip_ref.extractall(extract_path)
+    try:
+        zip_path = extract_path+zip_pathe
+        with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+            zip_ref.extractall(extract_path)
 
-    os.remove(zip_path)  # Remove o arquivo ZIP após a extração    
+        os.remove(zip_path)  # Remove o arquivo ZIP após a extração 
+    except:
+        print('Sem zip files na pasta.')   
 
 def renomear_arquivos_csv(pasta):
     """
