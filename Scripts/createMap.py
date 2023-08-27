@@ -1,16 +1,76 @@
 import folium
 import branca
 import pandas as pd
-from MapInfo import *
+import os
 from geopy.distance import geodesic
+
+# Obtém o diretório do script atual
+script_dir = os.path.dirname(__file__)
+
+# Caminhos para os ícones
+vivo_icon_path = os.path.join(script_dir, '../Images/vivo.png')
+tim_icon_path = os.path.join(script_dir, '../Images/tim.png')
+claro_icon_path = os.path.join(script_dir, '../Images/claro.png')
+algar_icon_path = os.path.join(script_dir, '../Images/algar.png')
+ligga_icon_path = os.path.join(script_dir, '../Images/ligga.png')
+ligue_icon_path = os.path.join(script_dir, '../Images/ligue.jpg')
+sercomtel_icon_path = os.path.join(script_dir, '../Images/sercomtel.png')
+winity_icon_path = os.path.join(script_dir, '../Images/winity.jpg')
+brisanet_icon_path = os.path.join(script_dir, '../Images/brisa.jpg')
+userhomebooss = os.path.join(script_dir, '../Images/liksboss.png')
+
+# Cria os ícones personalizados
+VivoIcon = folium.features.CustomIcon(vivo_icon_path, icon_size=(20, 20))
+TimIcon = folium.features.CustomIcon(tim_icon_path, icon_size=(20, 20))
+ClaroIcon = folium.features.CustomIcon(claro_icon_path, icon_size=(20, 20))
+AlgarIcon = folium.features.CustomIcon(algar_icon_path, icon_size=(20, 20))
+LiggaIcon = folium.features.CustomIcon(ligga_icon_path, icon_size=(20, 20))
+LigueIcon = folium.features.CustomIcon(ligue_icon_path, icon_size=(20, 20))
+SercomtelIcon = folium.features.CustomIcon(sercomtel_icon_path, icon_size=(20, 20))
+WinityIcon = folium.features.CustomIcon(winity_icon_path, icon_size=(20, 20))
+BrisanetIcon = folium.features.CustomIcon(brisanet_icon_path, icon_size=(20, 20))
+
+timHexa = '#094A95'
+claroHexa = '#E3272F'
+vivoHexa = '#660099'
+algarHexa = '#1B7E6C'
+brisanetHexa = '#EF7D36'
+sercomtelHexa = '#121C54'
+ligueHexa = '#50099E'
+winityHexa = '#35EBC9'
+liggaHexa= '#FF9200'
+
+def choseBest(name):
+    if 'NICA BRASIL' in name:
+        Hexap = vivoHexa
+    elif 'ALGAR TELECOM' in name:
+        Hexap = algarHexa
+    elif 'Brisanet Servicos' in name:
+        Hexap = brisanetHexa
+    elif 'SERCOMTEL' in name:
+        Hexap = sercomtelHexa
+    elif 'LIGUE TELECOM' in name:
+        Hexap = ligueHexa
+    elif 'Winity Ii Telecom' in name:
+        Hexap = winityHexa
+    elif 'LIGGA TELECOMUNICACOES' in name:
+        Hexap = liggaHexa
+    elif 'CLARO' in name:
+        Hexap = claroHexa
+    else:
+        Hexap = timHexa
+    return Hexap
 
 def makeMap(homeLatitude, homeLongitude, ufsInteresse, raio_km=40):
 
     # Função para verificar se uma coordenada está dentro do raio
     coord_referencia = (homeLatitude, homeLongitude)
 
-    # Carregar os dados do arquivo CSV
-    df = pd.read_csv('../Data/ERBS/final.csv',encoding='latin-1')
+    # Caminho absoluto para o arquivo final.csv
+    csv_file_path = os.path.join(script_dir, '../Data/ERBS/final.csv')
+
+    # Carrega o arquivo CSV
+    df = pd.read_csv(csv_file_path, encoding='latin-1')
     df=df[df['SiglaUf'].isin(ufsInteresse)]
 
     # Filtrar os objetos que estão dentro do raio de 80 km
@@ -18,7 +78,7 @@ def makeMap(homeLatitude, homeLongitude, ufsInteresse, raio_km=40):
     df = df[df["Distancia"] <= raio_km]
 
     mm = folium.Map(location=[homeLatitude, homeLongitude], tiles="Stamen Terrain", prefer_canvas=True)
-    folium.Marker([homeLatitude, homeLongitude], tooltip='Casa', icon=folium.features.CustomIcon('../Images/liksboss.png', icon_size=(30,30))).add_to(mm)
+    folium.Marker([homeLatitude, homeLongitude], tooltip='Casa', icon=folium.features.CustomIcon(userhomebooss, icon_size=(30,30))).add_to(mm)
 
     folium.raster_layers.TileLayer(
         tiles='https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
@@ -132,5 +192,5 @@ def makeMap(homeLatitude, homeLongitude, ufsInteresse, raio_km=40):
 
     mm.save('map.html')
     return 'map.html'
-
+    
 makeMap(-9.433171403617512, -40.51735496476326, ['BA'], 40)
