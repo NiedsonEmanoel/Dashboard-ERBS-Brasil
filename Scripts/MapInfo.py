@@ -13,7 +13,7 @@ WinityIcon = folium.features.CustomIcon('../Images/winity.jpg', icon_size=(20,20
 BrisanetIcon = folium.features.CustomIcon('../Images/brisa.jpg', icon_size=(20,20))
 
 
-timHexa = '#024691'
+timHexa = '#094A95'
 claroHexa = '#E3272F'
 vivoHexa = '#660099'
 algarHexa = '#1B7E6C'

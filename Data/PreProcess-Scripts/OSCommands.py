@@ -212,9 +212,7 @@ def cleanDF(dfLocation):
         print('Operação bloqueada, dados pré-processados.')
         return
 
-    dfAnatel = dfAnatel[dfAnatel['NumServico'] == 10]
     dfAnatel['RaioAlcance'] = 0
-    dfAnatel['ShowPoint'] = 0
 
     numeric_columns = ['FreqTxMHz', 'FreqRxMHz', 'GanhoAntena', 'AlturaAntena']
     dfAnatel[numeric_columns] = dfAnatel[numeric_columns].apply(pd.to_numeric, errors='coerce')
