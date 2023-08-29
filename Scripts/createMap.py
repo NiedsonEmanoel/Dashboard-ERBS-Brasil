@@ -168,7 +168,7 @@ def makeMap(homeLatitude, homeLongitude, ufsInteresse, raio_km=40):
         else:
             kms = (round((((torre.RaioAlcance * 1000) - torre.Distancia * 1000) / 1000), 2))*-1
             if(str(kms)=='nan'):
-                Alcance = 'Possivelmente fora da área de cobertura, <b>provavelmente torre de serviço da operadora</b>.'
+                Alcance = 'Possivelmente fora da área de cobertura, <b>provavelmente torre de serviço da operadora</b>, ou torre desabilitada.'
             else:
                 Alcance = 'Possivelmente fora da área de cobertura, faltam ' + str(kms) + 'km para entrar na zona de cobertura.'
 
@@ -193,4 +193,5 @@ def makeMap(homeLatitude, homeLongitude, ufsInteresse, raio_km=40):
     mm.save('map.html')
     return 'map.html'
     
-makeMap(-9.433171403617512, -40.51735496476326, ['BA'], 40)
+makeMap(-9.192850234349876, -40.41193949600815, ['BA', 'PE'], 40)
+#https://ispdesign.ui.com/#
