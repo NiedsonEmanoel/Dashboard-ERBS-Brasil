@@ -2,6 +2,7 @@ import folium
 import branca
 import pandas as pd
 import os
+from perfilSubida import elevationPerfil
 from geopy.distance import geodesic
 
 # Obtém o diretório do script atual
@@ -162,26 +163,35 @@ def makeMap(homeLatitude, homeLongitude, ufsInteresse, raio_km=40):
             IconP = TimIcon
         
         Alcance = ''
+        bolutil = 0
+        torreNum = str(torre.NumEstacao).replace('.0', '')
 
         if (((torre.RaioAlcance*1000)-torre.Distancia*1000)>=0):
             Alcance = 'Possivelmente coberto'
+            bolutil = 1
         else:
             kms = (round((((torre.RaioAlcance * 1000) - torre.Distancia * 1000) / 1000), 2))*-1
             if(str(kms)=='nan'):
                 Alcance = 'Possivelmente fora da área de cobertura, <b>provavelmente torre de serviço da operadora</b>, ou torre desabilitada.'
+                bolutil = 0
             else:
                 Alcance = 'Possivelmente fora da área de cobertura, faltam ' + str(kms) + 'km para entrar na zona de cobertura.'
+                bolutil = 0
 
         content = f"""
         <strong>Distância:</strong> {round(torre.Distancia, 2)}km<br>
         <strong>Cobertura:</strong> {Alcance}<br><br>
         <strong>Operadora:</strong> {torre.NomeEntidade}<br>
-        <strong>Torre:</strong> {str(torre.NumEstacao).replace('.0', '')}<br>
+        <strong>Torre:</strong> {torreNum}<br>
         <strong>Tecnologia:</strong> {str(torre.Tecnologia).replace('NR', '5G')}<br>
         <strong>Frequência:</strong> {torre.FreqTxMHz}Mhz<br>
         <strong>Altura:</strong> {torre.AlturaAntena}m<br><br>
-        <strong>Endereço:</strong> {str(torre.EnderecoEstacao)}<br>
+        <strong>Endereço:</strong> {str(torre.EnderecoEstacao)}<br><br>
         """
+        if(bolutil == 1):
+            elevationPerfil(torre.Latitude, torre.Longitude, homeLatitude, homeLongitude, torre.AlturaAntena, 5, torreNum)
+            addtionContent = f""" <img src="img/{torreNum}.png"  style="max-width: 100%; height: auto;">"""
+            content = str(content) + str(addtionContent)
 
         folium.Marker(
             [torre.Latitude, torre.Longitude],
@@ -193,5 +203,5 @@ def makeMap(homeLatitude, homeLongitude, ufsInteresse, raio_km=40):
     mm.save('map.html')
     return 'map.html'
     
-makeMap(-9.192850234349876, -40.41193949600815, ['BA', 'PE'], 40)
+makeMap(-9.192850234349876, -40.41193949600815, ['PE'], 40)
 #https://ispdesign.ui.com/#
