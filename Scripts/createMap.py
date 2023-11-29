@@ -189,8 +189,9 @@ def makeMap(homeLatitude, homeLongitude, ufsInteresse, raio_km=40):
         <strong>Endereço:</strong> {str(torre.EnderecoEstacao)}<br><br>
         """
         if(bolutil == 1):
-            elevationPerfil(torre.Latitude, torre.Longitude, homeLatitude, homeLongitude, torre.AlturaAntena, 5, torreNum)
-            addtionContent = f""" <img src="img/{torreNum}.png"  style="max-width: 100%; height: auto;">"""
+            elevationPerfil(torre.Latitude, torre.Longitude, homeLatitude, homeLongitude, torre.AlturaAntena, 1, torreNum)
+            addtionContent = f"""<a href="img/{torreNum}.png" target="_blank">
+ <img src="img/{torreNum}.png"  style="max-width: 100%; height: auto;"> </a>"""
             content = str(content) + str(addtionContent)
 
         folium.Marker(
@@ -203,5 +204,5 @@ def makeMap(homeLatitude, homeLongitude, ufsInteresse, raio_km=40):
     mm.save('map.html')
     return 'map.html'
     
-makeMap(-9.192850234349876, -40.41193949600815, ['PE'], 40)
+makeMap(-9.193017, -40.411904, ['PE'], 30)
 #https://ispdesign.ui.com/#

@@ -41,7 +41,6 @@ def elevationPerfil(latitudeA, longitudeA, latitudeB, longitudeB, torreAltura, b
     # Mostrando os índices das colisões no gráfico
     if collision_indices:
         collision_text = ', '.join([str(idx) for idx in collision_indices])
-        print('Colisões detectadas')
 
     # Estilizando o gráfico
     plt.figure(figsize=(10, 6))
